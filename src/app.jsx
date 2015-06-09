@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
 
 function zeroPad(num) {
   return num < 10 ? '0' + num : num;
@@ -104,6 +105,11 @@ class MessageBar extends Component {
 }
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.socket = io();
+  }
+
   render() {
     return (
       <div>
