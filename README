@@ -1,0 +1,8 @@
+For development:
+
+    node server
+
+For production:
+
+    webpack -p --config webpack.production.config.js
+    NODE_ENV=production node server

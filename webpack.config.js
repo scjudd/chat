@@ -6,14 +6,14 @@ module.exports = {
   // and line number
   devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://0.0.0.0:3000',
-    'webpack/hot/only-dev-server',
+    'webpack-dev-server/client?http://0.0.0.0:8080',
+    'webpack/hot/dev-server',
     './src/index',
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'public', 'build'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/build/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
