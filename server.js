@@ -29,12 +29,30 @@ proxy.on('error', function(e) {
 
 var io = require('socket.io')(http);
 
+var nicks = Object.create(null);
+
 io.on('connection', function(socket) {
-  console.log('a user connected');
+
+  var nick = "Guest" + makeid();
+  while (nicks[nick] !== undefined) {
+    nick = "Guest" + makeid();
+  };
+
+  nicks[nick] = socket.id;
+
+  console.log(nick + ' connected');
+
   socket.on('disconnect', function() {
-    console.log('user disconnected');
+    delete nicks[nick];
+    console.log(nick + ' disconnected');
   });
-  socket.on('message-sent', function(msg) {
+
+  socket.on('message-sent', function(body) {
+    var msg = {
+      nick: nick,
+      date: new Date(),
+      body: body
+    };
     io.emit('message-received', msg);
     console.log('message: ' + msg.body);
   });

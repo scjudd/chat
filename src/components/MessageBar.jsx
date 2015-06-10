@@ -2,17 +2,29 @@ import React, { Component } from 'react';
 import { AppDispatcher } from '../dispatcher';
 
 export default class MessageBar extends Component {
-  update(e) {
+  constructor() {
+    super();
+
+    this.state = {
+      message: ""
+    };
+
+    this.updateMessage = this.updateMessage.bind(this);
+    this.submitMessage = this.submitMessage.bind(this);
+    this.render = this.render.bind(this);
+  }
+
+  updateMessage() {
+    this.setState({message: this.refs.message.getDOMNode().value});
+  }
+
+  submitMessage(e) {
     if (e.which == 13 && e.target.value !== "") {
       AppDispatcher.dispatch({
         eventName: 'message-sent',
-        message: {
-          nick: 'n0c',
-          date: new Date(),
-          body: e.target.value
-        }
+        message: this.state.message
       });
-      e.target.value = "";
+      this.setState({message: ""});
     }
   }
 
@@ -38,7 +50,10 @@ export default class MessageBar extends Component {
       <div style={styles.container}>
         <input
           type="text"
-          onKeyUp={this.update}
+          ref="message"
+          value={this.state.message}
+          onChange={this.updateMessage}
+          onKeyUp={this.submitMessage}
           placeholder="Type your message here"
           style={styles.input} />
       </div>

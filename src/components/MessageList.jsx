@@ -19,7 +19,15 @@ export default class MessageList extends Component {
   render() {
     var lastDate;
     var messages = this.state.messages.map(function(msg) {
-      return <Message key={uuid()} date={msg.date} nick={msg.nick} body={msg.body} />
+      if (msg.type === 'message') {
+        return (
+          <Message key={uuid()} date={msg.date}>
+            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+            <span>: </span>
+            <span>{msg.body}</span>
+          </Message>
+        );
+      }
     });
     return (
       <div>{messages}</div>
