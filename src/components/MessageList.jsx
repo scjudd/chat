@@ -27,6 +27,22 @@ export default class MessageList extends Component {
             <span>{msg.body}</span>
           </Message>
         );
+      } else if (msg.type === 'nick-changed') {
+        return (
+          <Message key={uuid()} date={msg.date}>
+            <span style={{fontWeight: 'bold'}}>{msg.oldNick}</span>
+            <span> changed their nick to </span>
+            <span style={{fontWeight: 'bold'}}>{msg.newNick}</span>
+          </Message>
+        );
+      } else if (msg.type === 'nick-taken') {
+        return (
+          <Message key={uuid()} date={msg.date}>
+            <span>The nick </span>
+            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+            <span> is already in use!</span>
+          </Message>
+        );
       }
     });
     return (

@@ -16,4 +16,34 @@ socket.on('message-received', function(msg) {
   });
 });
 
+socket.on('nick-changed', function(info) {
+  AppDispatcher.dispatch({
+    eventName: 'nick-changed',
+    message: {
+      type: 'nick-changed',
+      date: new Date(info.date),
+      oldNick: info.oldNick,
+      newNick: info.newNick
+    }
+  });
+});
+
+socket.on('nick-set', function(nick) {
+  AppDispatcher.dispatch({
+    eventName: 'nick-set',
+    nick: nick
+  });
+});
+
+socket.on('nick-taken', function(info) {
+  AppDispatcher.dispatch({
+    eventName: 'nick-taken',
+    message: {
+      type: 'nick-taken',
+      date: new Date(info.date),
+      nick: info.nick
+    }
+  });
+});
+
 export { socket }

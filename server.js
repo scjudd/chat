@@ -59,6 +59,7 @@ io.on('connection', function(socket) {
   };
 
   nicks[nick] = socket.id;
+  socket.emit('nick-set', nick);
 
   console.log('[' + formatTime(new Date()) + '] ' + nick + ' connected');
 
@@ -75,6 +76,34 @@ io.on('connection', function(socket) {
     };
     io.emit('message-received', msg);
     console.log('[' + formatTime(msg.date) + '] ' + msg.nick + ': ' + msg.body);
+  });
+
+  socket.on('change-nick', function(newNick) {
+    if (nicks[newNick] !== undefined) {
+      var msg = {
+        date: new Date(),
+        nick: newNick
+      };
+      socket.emit('nick-taken', msg);
+      console.log('[' + formatTime(msg.date) + '] nick "' + nick + '" is taken!');
+      return
+    }
+
+    var oldNick = nick;
+    delete nicks[oldNick];
+    nicks[newNick] = socket.id;
+    nick = newNick;
+
+    socket.emit('nick-set', nick);
+
+    var msg = {
+      date: new Date(),
+      oldNick: oldNick,
+      newNick: nick,
+    };
+    io.emit('nick-changed', msg);
+
+    console.log('[' + formatTime(msg.date) + '] "' + oldNick + '" changed nick to "' + nick + '"');
   });
 });
 
