@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 
-import { m } from '../utils';
-
-function zeroPad(num) {
-  return num < 10 ? '0' + num : num;
-}
-
-function formatTime(date) {
-  return (
-    zeroPad(date.getHours()) + ':' +
-    zeroPad(date.getMinutes()) + ':' +
-    zeroPad(date.getSeconds())
-  );
-}
+import { m, formatTime } from '../utils';
 
 export default class Message extends Component {
   render() {

@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-
-function formatDate(date) {
-  var months = [
-    "January", "February", "March", "April", "May", "June", "July", "August",
-    "September", "October", "November", "December"
-  ];
-  return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
-}
+import { formatDate } from '../utils';
 
 export default class DateSeparator extends Component {
   render() {
