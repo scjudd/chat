@@ -29,6 +29,26 @@ proxy.on('error', function(e) {
 
 var io = require('socket.io')(http);
 
+function makeid() {
+  var text = "";
+  var possible = "0123456789";
+  for( var i=0; i < 5; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
+function zeroPad(num) {
+  return num < 10 ? '0' + num : num;
+}
+
+function formatTime(date) {
+  return (
+    zeroPad(date.getHours()) + ':' +
+    zeroPad(date.getMinutes()) + ':' +
+    zeroPad(date.getSeconds())
+  );
+}
+
 var nicks = Object.create(null);
 
 io.on('connection', function(socket) {
@@ -40,11 +60,11 @@ io.on('connection', function(socket) {
 
   nicks[nick] = socket.id;
 
-  console.log(nick + ' connected');
+  console.log('[' + formatTime(new Date()) + '] ' + nick + ' connected');
 
   socket.on('disconnect', function() {
     delete nicks[nick];
-    console.log(nick + ' disconnected');
+    console.log('[' + formatTime(new Date()) + '] ' + nick + ' disconnected');
   });
 
   socket.on('message-sent', function(body) {
@@ -54,7 +74,7 @@ io.on('connection', function(socket) {
       body: body
     };
     io.emit('message-received', msg);
-    console.log('message: ' + msg.body);
+    console.log('[' + formatTime(msg.date) + '] ' + msg.nick + ': ' + msg.body);
   });
 });
 
