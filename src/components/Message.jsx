@@ -16,7 +16,7 @@ export default class Message extends Component {
   render() {
     return (
       <ul className="message">
-        <li>{formatTime(this.props.date)}</li>
+        <li>{formatTime(new Date(this.props.date))}</li>
         <li>{this.props.nick}</li>
         <li>{this.props.body}</li>
       </ul>
