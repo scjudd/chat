@@ -24,6 +24,7 @@
     "express": "^4.12.4",
     "flux": "^2.0.3",
     "microevent": "^1.0.0",
+    "object-assign": "^3.0.0",
     "socket.io": "^1.3.5",
     "socket.io-client": "^1.3.5"
   }

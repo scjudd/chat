@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { m } from '../utils';
+
 function zeroPad(num) {
   return num < 10 ? '0' + num : num;
 }
@@ -14,11 +16,34 @@ function formatTime(date) {
 
 export default class Message extends Component {
   render() {
+    var styles = {
+      message: {
+        margin: 0,
+        padding: 0
+      },
+      part: {
+        display: 'inline'
+      },
+      date: {
+        paddingRight: '0.5em',
+        marginRight: '0.5em',
+        borderRight: '1px solid black'
+      },
+      nick: {
+        fontWeight: 'bold',
+        marginRight: '1em'
+      }
+    };
+
     return (
-      <ul className="message">
-        <li>{formatTime(new Date(this.props.date))}</li>
-        <li>{this.props.nick}</li>
-        <li>{this.props.body}</li>
+      <ul style={styles.message}>
+        <li style={m(styles.part, styles.date)}>
+          {formatTime(new Date(this.props.date))}
+        </li>
+        <li style={m(styles.part, styles.nick)}>
+          {this.props.nick}:
+        </li>
+        <li style={styles.part}>{this.props.body}</li>
       </ul>
     );
   }

@@ -22,9 +22,7 @@ export default class MessageList extends Component {
       return <Message key={uuid()} date={msg.date} nick={msg.nick} body={msg.body} />
     });
     return (
-      <div className="messageList">
-        {messages}
-      </div>
+      <div>{messages}</div>
     );
   }
 }

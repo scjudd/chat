@@ -17,28 +17,30 @@ export default class MessageBar extends Component {
   }
 
   render() {
+    var styles = {
+      container: {
+        boxSizing: 'border-box',
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        padding: 6
+      },
+      input: {
+        boxSizing: 'border-box',
+        width: 'inherit',
+        padding: 6,
+        border: '1px solid black',
+        fontSize: '1.25em'
+      }
+    };
+
     return (
-      <div
-        style={{
-          boxSizing: 'border-box',
-          position: 'fixed',
-          bottom: 0,
-          width: '100%',
-          padding: 6,
-        }}>
+      <div style={styles.container}>
         <input
           type="text"
           onKeyUp={this.update}
-          className="messageBar"
           placeholder="Type your message here"
-          style={{
-            boxSizing: 'border-box',
-            width: 'inherit',
-            padding: 6,
-            border: '1px solid black',
-            fontSize: '1.25em',
-          }}
-        />
+          style={styles.input} />
       </div>
     );
   }
