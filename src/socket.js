@@ -1,11 +1,10 @@
 import io from 'socket.io-client';
-import { AppDispatcher } from './dispatcher';
+import Dispatcher from './dispatcher';
 
-var socket = io();
+let socket = io();
 
-socket.on('message-received', function(msg) {
-  msg.date = new Date(msg.date);
-  AppDispatcher.dispatch({
+socket.on('message-received', msg => {
+  Dispatcher.dispatch({
     eventName: 'message-received',
     message: {
       type: 'message',
@@ -16,8 +15,8 @@ socket.on('message-received', function(msg) {
   });
 });
 
-socket.on('nick-changed', function(info) {
-  AppDispatcher.dispatch({
+socket.on('nick-changed', info => {
+  Dispatcher.dispatch({
     eventName: 'nick-changed',
     message: {
       type: 'nick-changed',
@@ -28,15 +27,15 @@ socket.on('nick-changed', function(info) {
   });
 });
 
-socket.on('nick-set', function(nick) {
-  AppDispatcher.dispatch({
+socket.on('nick-set', nick => {
+  Dispatcher.dispatch({
     eventName: 'nick-set',
     nick: nick
   });
 });
 
-socket.on('nick-taken', function(info) {
-  AppDispatcher.dispatch({
+socket.on('nick-taken', info => {
+  Dispatcher.dispatch({
     eventName: 'nick-taken',
     message: {
       type: 'nick-taken',
@@ -46,4 +45,4 @@ socket.on('nick-taken', function(info) {
   });
 });
 
-export { socket }
+export default socket

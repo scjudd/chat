@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import MessageList from './MessageList';
 import MessageBar from './MessageBar';
 
-export default class App extends Component {
-  render() {
+export default React.createClass({
+  render: function() {
     return (
       <div>
         <MessageList />
@@ -12,4 +12,4 @@ export default class App extends Component {
       </div>
     );
   }
-}
+});

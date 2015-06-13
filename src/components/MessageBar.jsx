@@ -1,65 +1,59 @@
-import React, { Component } from 'react';
-import { AppDispatcher } from '../dispatcher';
-import { nickStore } from '../stores/nick';
+import React from 'react';
 
-export default class MessageBar extends Component {
-  constructor() {
-    super();
+import Dispatcher from '../dispatcher';
+import NickStore from '../stores/nick';
 
-    this.state = {
+export default React.createClass({
+  getInitialState: function() {
+    return {
       nick: undefined,
       message: ""
     };
+  },
 
-    this.nickSet = this.nickSet.bind(this);
-    this.updateNick = this.updateNick.bind(this);
-    this.submitNickChange = this.submitNickChange.bind(this);
-    this.updateMessage = this.updateMessage.bind(this);
-    this.submitMessage = this.submitMessage.bind(this);
-    this.render = this.render.bind(this);
-  }
+  updateNick: function() {
+    let nick = this.refs.nick.getDOMNode().value;
+    this.setState({nick});
+  },
 
-  updateNick() {
-    this.setState({nick: this.refs.nick.getDOMNode().value});
-  }
-
-  submitNickChange() {
-    AppDispatcher.dispatch({
+  submitNickChange: function() {
+    Dispatcher.dispatch({
       eventName: 'change-nick',
       nick: this.state.nick
     });
-  }
+  },
 
-  updateMessage() {
-    this.setState({message: this.refs.message.getDOMNode().value});
-  }
+  updateMessage: function() {
+    let message = this.refs.message.getDOMNode().value;
+    this.setState({message});
+  },
 
-  submitMessage(e) {
+  submitMessage: function(e) {
     if (e.which == 13 && e.target.value !== "") {
-      AppDispatcher.dispatch({
+      Dispatcher.dispatch({
         eventName: 'message-sent',
         message: this.state.message
       });
       this.setState({message: ""});
     }
-  }
+  },
 
-  componentDidMount() {
-    nickStore.bind('change', this.nickSet);
-  }
+  componentDidMount: function() {
+    NickStore.bind('change', this.nickSet);
+  },
 
-  componentWillUnmount() {
-    nickStore.unbind('change', this.nickSet);
-  }
+  componentWillUnmount: function() {
+    NickStore.unbind('change', this.nickSet);
+  },
 
-  nickSet() {
-    var nick = nickStore.get();
+  nickSet: function() {
+    let nick = NickStore.get();
     console.log('changing nick to: ' + nick);
-    this.setState({nick: nick});
-  }
+    this.setState({nick});
+  },
 
-  render() {
-    var styles = {
+  render: function() {
+    let styles = {
       container: {
         boxSizing: 'border-box',
         position: 'fixed',
@@ -103,4 +97,4 @@ export default class MessageBar extends Component {
       </div>
     );
   }
-}
+});

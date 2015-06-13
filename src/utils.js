@@ -1,18 +1,18 @@
 import assign from 'object-assign';
 
-export function m() {
-  var res = {};
-  for (var i = 0; i < arguments.length; ++i) {
-    if (arguments[i]) {
-      assign(res, arguments[i]);
+export function m(...args) {
+  let res = {};
+  for (let i = 0; i < args.length; ++i) {
+    if (args[i]) {
+      assign(res, args[i]);
     }
   }
   return res;
 }
 
 export function uuid() {
-  var i, random;
-  var uuid = '';
+  let i, random;
+  let uuid = '';
   for (i = 0; i < 32; i++) {
     random = Math.random() * 16 | 0;
     if (i === 8 || i === 12 || i === 16 || i === 20) {
@@ -37,7 +37,7 @@ export function formatTime(date) {
 }
 
 export function formatDate(date) {
-  var months = [
+  let months = [
     "January", "February", "March", "April", "May", "June", "July", "August",
     "September", "October", "November", "December"
   ];

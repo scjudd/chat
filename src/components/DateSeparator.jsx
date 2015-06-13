@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { formatDate } from '../utils';
 
-export default class DateSeparator extends Component {
-  render() {
-    var styles = {
+export default React.createClass({
+  render: function() {
+    let styles = {
       container: {
         textAlign: 'center',
       },
@@ -26,4 +26,4 @@ export default class DateSeparator extends Component {
       </div>
     );
   }
-}
+});

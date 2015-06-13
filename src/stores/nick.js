@@ -1,14 +1,17 @@
 import MicroEvent from 'microevent';
 
-export default function NickStore() {
+function NickStore() {
   this.nick = "";
 }
 
 NickStore.prototype.get = function() {
   return this.nick;
-}
+};
+
+NickStore.prototype.set = function(newNick) {
+  this.nick = newNick;
+};
 
 MicroEvent.mixin(NickStore);
 
-var nickStore = new NickStore();
-export { nickStore }
+export default new NickStore()

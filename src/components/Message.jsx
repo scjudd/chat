@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { formatTime } from '../utils';
 
-export default class Message extends Component {
-  render() {
+export default React.createClass({
+  render: function() {
     return (
       <div>
         <span>{formatTime(this.props.date)} │ </span>
@@ -11,4 +11,4 @@ export default class Message extends Component {
       </div>
     );
   }
-}
+});

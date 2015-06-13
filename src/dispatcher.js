@@ -1,19 +1,19 @@
 import { Dispatcher } from 'flux';
-import { messageStore } from './stores/messages';
-import { nickStore } from './stores/nick';
-import { socket } from './socket';
+import MessageStore from './stores/messages';
+import NickStore from './stores/nick';
+import socket from './socket';
 
-var AppDispatcher = new Dispatcher();
+let AppDispatcher = new Dispatcher();
 
-AppDispatcher.register(function(payload) {
+AppDispatcher.register(payload => {
   switch(payload.eventName) {
     case 'message-sent':
       socket.emit('message-sent', payload.message);
       break;
 
     case 'message-received':
-      messageStore.items.push(payload.message);
-      messageStore.trigger('change');
+      MessageStore.push(payload.message);
+      MessageStore.trigger('change');
       break;
 
     case 'change-nick':
@@ -21,22 +21,22 @@ AppDispatcher.register(function(payload) {
       break;
 
     case 'nick-changed':
-      messageStore.items.push(payload.message);
-      messageStore.trigger('change');
+      MessageStore.push(payload.message);
+      MessageStore.trigger('change');
       break;
 
     case 'nick-set':
-      nickStore.nick = payload.nick;
-      nickStore.trigger('change');
+      NickStore.set(payload.nick);
+      NickStore.trigger('change');
       break;
 
     case 'nick-taken':
-      messageStore.items.push(payload.message);
-      messageStore.trigger('change');
-      nickStore.trigger('change');
+      MessageStore.push(payload.message);
+      MessageStore.trigger('change');
+      NickStore.trigger('change');
       break;
   }
   return true;
 });
 
-export { AppDispatcher }
+export default AppDispatcher

@@ -1,14 +1,17 @@
 import MicroEvent from 'microevent';
 
-export default function MessageStore() {
+function MessageStore() {
   this.items = [];
 }
 
 MessageStore.prototype.getAll = function() {
   return this.items;
-}
+};
+
+MessageStore.prototype.push = function(msg) {
+  this.items.push(msg);
+};
 
 MicroEvent.mixin(MessageStore);
 
-var messageStore = new MessageStore();
-export { messageStore }
+export default new MessageStore()

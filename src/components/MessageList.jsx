@@ -1,24 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { uuid } from '../utils';
-import { messageStore } from '../stores/messages';
+import MessageStore from '../stores/messages';
 import Message from './Message';
 
-export default class MessageList extends Component {
-  constructor() {
-    super();
-    this.state = {messages: []};
-    this.changed = this.changed.bind(this);
-    this.render = this.render.bind(this);
-  }
+export default React.createClass({
+  getInitialState: function() {
+    return {
+      messages: []
+    };
+  },
 
-  componentDidMount()    { messageStore.bind(  'change', this.changed); }
-  componentWillUnmount() { messageStore.unbind('change', this.changed); }
-  changed()              { this.setState({messages: messageStore.getAll()}); }
+  componentDidMount: function() {
+    MessageStore.bind('change', this.changed);
+  },
 
-  render() {
-    var lastDate;
-    var messages = this.state.messages.map(function(msg) {
+  componentWillUnmount: function() {
+    MessageStore.unbind('change', this.changed);
+  },
+
+  changed: function() {
+    let messages = MessageStore.getAll();
+    this.setState({messages});
+  },
+
+  render: function() {
+    let lastDate;
+    let messages = this.state.messages.map(msg => {
       if (msg.type === 'message') {
         return (
           <Message key={uuid()} date={msg.date}>
@@ -45,8 +53,9 @@ export default class MessageList extends Component {
         );
       }
     });
+
     return (
       <div>{messages}</div>
     );
   }
-}
+});
