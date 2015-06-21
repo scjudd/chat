@@ -61,10 +61,13 @@ io.on('connection', function(socket) {
   nicks[nick] = socket.id;
   socket.emit('nickChanged', {date: new Date(), nick: nick});
 
+  io.emit('peerConnected', {date: new Date(), nick: nick});
+
   console.log('[' + formatTime(new Date()) + '] ' + nick + ' connected');
 
   socket.on('disconnect', function() {
     delete nicks[nick];
+    io.emit('peerDisconnected', {date: new Date(), nick: nick});
     console.log('[' + formatTime(new Date()) + '] ' + nick + ' disconnected');
   });
 
@@ -105,6 +108,16 @@ io.on('connection', function(socket) {
 
     console.log('[' + formatTime(msg.date) + '] "' + oldNick + '" changed nick to "' + nick + '"');
   });
+
+  socket.on('getPeerList', function() {
+    var users = [];
+    for (var nick in nicks) {
+      users.push(nick);
+    }
+    socket.emit('peerList', {date: new Date(), users: users});
+  });
+
+  console.log(nicks);
 });
 
 http.listen(port, function() {
