@@ -1,17 +1,21 @@
-import MicroEvent from 'microevent';
+import Reflux from 'reflux';
 
-function NickStore() {
-  this.nick = "";
-}
+import actions from '../actions';
 
-NickStore.prototype.get = function() {
-  return this.nick;
-};
+var nick = undefined;
 
-NickStore.prototype.set = function(newNick) {
-  this.nick = newNick;
-};
+export default Reflux.createStore({
+  init: function() {
+    this.listenTo(actions.nickChanged, this.onChange);
+    this.listenTo(actions.nickTaken, this.onTaken);
+  },
 
-MicroEvent.mixin(NickStore);
+  onChange: function(newNick) {
+    nick = newNick;
+    this.trigger(nick);
+  },
 
-export default new NickStore()
+  onTaken: function() {
+    this.trigger(nick);
+  }
+});

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Dispatcher from '../dispatcher';
+import actions from '../actions';
 
 export default React.createClass({
   getInitialState: function() {
@@ -13,10 +13,7 @@ export default React.createClass({
 
   onKeyUp: function(evt) {
     if (evt.which == 13 && this.state.message !== '') {
-      Dispatcher.dispatch({
-        eventName: 'message-sent',
-        message: this.state.message
-      });
+      actions.sendMessage(this.state.message);
       this.setState({message: ''});
     }
   },

@@ -1,17 +1,31 @@
-import MicroEvent from 'microevent';
+import Reflux from 'reflux';
 
-function MessageStore() {
-  this.items = [];
-}
+import actions from '../actions';
 
-MessageStore.prototype.getAll = function() {
-  return this.items;
-};
+var messages = [];
 
-MessageStore.prototype.push = function(msg) {
-  this.items.push(msg);
-};
+export default Reflux.createStore({
+  init: function() {
+    this.listenTo(actions.peerSentMessage, this.onPeerSentMessage);
+    this.listenTo(actions.peerChangedNick, this.onPeerChangedNick);
+    this.listenTo(actions.nickTaken, this.onNickTaken);
+  },
 
-MicroEvent.mixin(MessageStore);
+  onPeerSentMessage: function(msg) {
+    msg.type = 'message';
+    messages.push(msg);
+    this.trigger(messages);
+  },
 
-export default new MessageStore()
+  onPeerChangedNick: function(msg) {
+    msg.type = 'nickChange';
+    messages.push(msg);
+    this.trigger(messages);
+  },
+
+  onNickTaken: function(msg) {
+    msg.type = 'nickTaken';
+    messages.push(msg);
+    this.trigger(messages);
+  }
+});

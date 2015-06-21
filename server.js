@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
   };
 
   nicks[nick] = socket.id;
-  socket.emit('nick-set', nick);
+  socket.emit('nickChanged', {date: new Date(), nick: nick});
 
   console.log('[' + formatTime(new Date()) + '] ' + nick + ' connected');
 
@@ -68,23 +68,23 @@ io.on('connection', function(socket) {
     console.log('[' + formatTime(new Date()) + '] ' + nick + ' disconnected');
   });
 
-  socket.on('message-sent', function(body) {
+  socket.on('sendMessage', function(body) {
     var msg = {
       nick: nick,
       date: new Date(),
       body: body
     };
-    io.emit('message-received', msg);
+    io.emit('peerSentMessage', msg);
     console.log('[' + formatTime(msg.date) + '] ' + msg.nick + ': ' + msg.body);
   });
 
-  socket.on('change-nick', function(newNick) {
+  socket.on('changeNick', function(newNick) {
     if (nicks[newNick] !== undefined) {
       var msg = {
         date: new Date(),
         nick: newNick
       };
-      socket.emit('nick-taken', msg);
+      socket.emit('nickTaken', msg);
       console.log('[' + formatTime(msg.date) + '] nick "' + nick + '" is taken!');
       return
     }
@@ -94,14 +94,14 @@ io.on('connection', function(socket) {
     nicks[newNick] = socket.id;
     nick = newNick;
 
-    socket.emit('nick-set', nick);
+    socket.emit('nickChanged', {date: new Date(), nick: nick});
 
     var msg = {
       date: new Date(),
       oldNick: oldNick,
       newNick: nick,
     };
-    io.emit('nick-changed', msg);
+    io.emit('peerChangedNick', msg);
 
     console.log('[' + formatTime(msg.date) + '] "' + oldNick + '" changed nick to "' + nick + '"');
   });

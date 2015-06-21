@@ -1,26 +1,23 @@
 import React from 'react';
 
 import { uuid } from '../utils';
-import MessageStore from '../stores/messages';
+import messageStore from '../stores/messages';
 import Message from './Message';
 
 export default React.createClass({
   getInitialState: function() {
-    return {
-      messages: []
-    };
+    return {messages: []};
   },
 
   componentDidMount: function() {
-    MessageStore.bind('change', this.changed);
+    this.unsubscribe = messageStore.listen(this.onMessageReceived);
   },
 
   componentWillUnmount: function() {
-    MessageStore.unbind('change', this.changed);
+    this.unsubscribe();
   },
 
-  changed: function() {
-    let messages = MessageStore.getAll();
+  onMessageReceived: function(messages) {
     this.setState({messages});
   },
 
@@ -35,7 +32,7 @@ export default React.createClass({
             <span>{msg.body}</span>
           </Message>
         );
-      } else if (msg.type === 'nick-changed') {
+      } else if (msg.type === 'nickChange') {
         return (
           <Message key={uuid()} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.oldNick}</span>
@@ -43,7 +40,7 @@ export default React.createClass({
             <span style={{fontWeight: 'bold'}}>{msg.newNick}</span>
           </Message>
         );
-      } else if (msg.type === 'nick-taken') {
+      } else if (msg.type === 'nickTaken') {
         return (
           <Message key={uuid()} date={msg.date}>
             <span>The nick </span>

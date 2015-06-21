@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Dispatcher from '../dispatcher';
-import NickStore from '../stores/nick';
+import actions from '../actions';
+import nickStore from '../stores/nick';
 
 export default React.createClass({
   getInitialState: function() {
@@ -9,15 +9,15 @@ export default React.createClass({
   },
 
   componentDidMount: function() {
-    NickStore.bind('change', this.onChangeReceived);
+    this.unsubscribe = nickStore.listen(this.onChangeReceived);
   },
 
   componentWillUnmount: function() {
-    NickStore.unbind('change', this.onChangeReceived);
+    this.unsubscribe();
   },
 
-  onChangeReceived: function() {
-    this.setState({nick: NickStore.get()});
+  onChangeReceived: function(info) {
+    this.setState({nick: info.nick});
   },
 
   onChange: function() {
@@ -25,10 +25,7 @@ export default React.createClass({
   },
 
   onBlur: function() {
-    Dispatcher.dispatch({
-      eventName: 'change-nick',
-      nick: this.state.nick
-    });
+    actions.changeNick(this.state.nick);
   },
 
   render: function() {
