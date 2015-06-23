@@ -24,7 +24,21 @@ export default React.createClass({
   render: function() {
     let lastDate;
     let messages = this.state.messages.map(msg => {
-      if (msg.type === 'message') {
+      if (msg.type === 'peerConnected') {
+        return (
+          <Message key={uuid()} date={msg.date}>
+            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+            <span> connected</span>
+          </Message>
+        );
+      } else if (msg.type === 'peerDisconnected') {
+        return (
+          <Message key={uuid()} date={msg.date}>
+            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+            <span> disconnected</span>
+          </Message>
+        );
+      } else if (msg.type === 'message') {
         return (
           <Message key={uuid()} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
