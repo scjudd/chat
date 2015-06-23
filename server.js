@@ -10,6 +10,8 @@ var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? 8080 : 3001;
 var publicPath = path.resolve(__dirname, 'public');
 
+var util = require('util');
+
 app.use(express.static(publicPath));
 
 if (!isProduction) {
@@ -29,66 +31,54 @@ proxy.on('error', function(e) {
 
 var io = require('socket.io')(http);
 
-function makeid() {
-  var text = "";
-  var possible = "0123456789";
+function randomNick() {
+  var nick = 'Guest';
+  var possible = '0123456789';
   for( var i=0; i < 5; i++ )
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
+    nick += possible.charAt(Math.floor(Math.random() * possible.length));
+  return nick;
 }
 
-function zeroPad(num) {
-  return num < 10 ? '0' + num : num;
-}
-
-function formatTime(date) {
-  return (
-    zeroPad(date.getHours()) + ':' +
-    zeroPad(date.getMinutes()) + ':' +
-    zeroPad(date.getSeconds())
-  );
+function message(msg) {
+  msg.date = msg.date || new Date();
+  return msg;
 }
 
 var nicks = Object.create(null);
 
 io.on('connection', function(socket) {
 
-  var nick = "Guest" + makeid();
-  while (nicks[nick] !== undefined) {
-    nick = "Guest" + makeid();
-  };
+  do { var nick = randomNick(); }
+  while (nicks[nick] !== undefined);
 
   nicks[nick] = socket.id;
-  socket.emit('nickChanged', {date: new Date(), nick: nick});
 
-  io.emit('peerConnected', {date: new Date(), nick: nick});
+  socket.emit('nickChanged', message({nick: nick}));
+  io.emit('peerConnected', message({nick: nick}));
 
-  console.log('[' + formatTime(new Date()) + '] ' + nick + ' connected');
+  util.log(nick + ' connected');
 
   socket.on('disconnect', function() {
     delete nicks[nick];
-    io.emit('peerDisconnected', {date: new Date(), nick: nick});
-    console.log('[' + formatTime(new Date()) + '] ' + nick + ' disconnected');
+
+    io.emit('peerDisconnected', message({nick: nick}));
+
+    util.log(nick + ' disconnected');
   });
 
   socket.on('sendMessage', function(body) {
-    var msg = {
-      nick: nick,
-      date: new Date(),
-      body: body
-    };
-    io.emit('peerSentMessage', msg);
-    console.log('[' + formatTime(msg.date) + '] ' + msg.nick + ': ' + msg.body);
+    io.emit('peerSentMessage', message({nick: nick, body: body}));
+
+    util.log(nick + ': ' + body);
   });
 
   socket.on('changeNick', function(newNick) {
+
     if (nicks[newNick] !== undefined) {
-      var msg = {
-        date: new Date(),
-        nick: newNick
-      };
-      socket.emit('nickTaken', msg);
-      console.log('[' + formatTime(msg.date) + '] nick "' + nick + '" is taken!');
+      socket.emit('nickTaken', message({nick: nick}));
+
+      util.log('nick "' + nick + '" is taken!');
+
       return
     }
 
@@ -97,27 +87,22 @@ io.on('connection', function(socket) {
     nicks[newNick] = socket.id;
     nick = newNick;
 
-    socket.emit('nickChanged', {date: new Date(), nick: nick});
+    socket.emit('nickChanged', message({nick: nick}));
+    io.emit('peerChangedNick', message({oldNick: oldNick, newNick: nick}));
 
-    var msg = {
-      date: new Date(),
-      oldNick: oldNick,
-      newNick: nick,
-    };
-    io.emit('peerChangedNick', msg);
-
-    console.log('[' + formatTime(msg.date) + '] "' + oldNick + '" changed nick to "' + nick + '"');
+    util.log('"' + oldNick + '" changed nick to "' + nick + '"');
   });
 
   socket.on('getPeerList', function() {
     var users = [];
-    for (var nick in nicks) {
-      users.push(nick);
+    for (var user in nicks) {
+      users.push(user);
     }
-    socket.emit('peerList', {date: new Date(), users: users});
-  });
 
-  console.log(nicks);
+    socket.emit('peerList', message({users: users}));
+
+    util.log('sent peer list to "' + nick + '"');
+  });
 });
 
 http.listen(port, function() {

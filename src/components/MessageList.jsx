@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { uuid } from '../utils';
 import messageStore from '../stores/messages';
 import Message from './Message';
 
