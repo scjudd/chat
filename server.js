@@ -12,7 +12,7 @@ var publicPath = path.resolve(__dirname, 'public');
 
 var util = require('util');
 
-var sortedMap = require('./server/sortedMap');
+var sortedArray = require('./server/sortedArray');
 
 app.use(express.static(publicPath));
 
@@ -64,7 +64,7 @@ function message(msg, addUUID) {
   return msg;
 }
 
-var users = sortedMap();
+var users = sortedArray();
 
 io.on('connection', function(socket) {
 
@@ -72,7 +72,7 @@ io.on('connection', function(socket) {
 
   do { var nick = randomNick(); }
   while (users.get(nick) !== undefined);
-  users.set(nick, uuid);
+  users.push(nick, uuid);
 
   socket.emit('nickChanged', message({nick: nick}));
   io.emit('peerConnected', message({nick: nick}));
@@ -105,7 +105,7 @@ io.on('connection', function(socket) {
 
     var oldNick = nick;
     users.delete(oldNick);
-    users.set(newNick, uuid);
+    users.push(newNick, uuid);
     nick = newNick;
 
     socket.emit('nickChanged', message({nick: nick}));

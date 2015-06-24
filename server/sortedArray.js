@@ -11,7 +11,7 @@ module.exports = function (internal) {
   };
 
   return {
-    set: function(key, value) {
+    push: function(key, value) {
       internal.push([key, value]);
       internal.sort(cmpFn);
     },
