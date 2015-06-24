@@ -75,9 +75,9 @@ io.on('connection', function(socket) {
   socket.on('changeNick', function(newNick) {
 
     if (nicks[newNick] !== undefined) {
-      socket.emit('nickTaken', message({nick: nick}));
+      socket.emit('nickTaken', message({nick: newNick}));
 
-      util.log('nick "' + nick + '" is taken!');
+      util.log('nick "' + newNick + '" is taken!');
 
       return
     }
