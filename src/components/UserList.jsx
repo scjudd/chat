@@ -14,26 +14,17 @@ export default React.createClass({
   
   componentDidMount: function() {
     this.unsubscribe = userStore.listen(this.onChange);
-
-    this.updateWidth();
-    window.addEventListener('resize', this.updateWidth);
   },
 
   componentWillUnmount: function() {
     this.unsubscribe();
-
-    window.removeEventListener('resize', this.updateWidth);
-  },
-
-  updateWidth: function() {
-    if (this.props.widthCallback !== undefined) {
-      this.props.widthCallback(this.getDOMNode().offsetWidth);
-    }
   },
 
   onChange: function(users) {
     this.setState({users});
-    this.updateWidth();
+    if (this.props.onChange !== undefined) {
+      this.props.onChange();
+    }
   },
 
   render: function() {

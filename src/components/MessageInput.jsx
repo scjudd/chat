@@ -1,6 +1,7 @@
 import React from 'react';
 
 import actions from '../actions';
+import { m } from '../utils';
 
 export default React.createClass({
   getInitialState: function() {
@@ -34,7 +35,7 @@ export default React.createClass({
         value={this.state.message}
         onChange={this.onChange}
         onKeyUp={this.onKeyUp}
-        style={style} />
+        style={m(style, this.props.style)} />
     );
   }
 });
