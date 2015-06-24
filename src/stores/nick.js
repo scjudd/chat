@@ -2,7 +2,7 @@ import Reflux from 'reflux';
 
 import actions from '../actions';
 
-var nick = undefined;
+let nick = undefined;
 
 export default Reflux.createStore({
   init: function() {

@@ -2,7 +2,7 @@ import Reflux from 'reflux';
 
 import actions from '../actions';
 
-var messages = [];
+let messages = [];
 
 export default Reflux.createStore({
   init: function() {
