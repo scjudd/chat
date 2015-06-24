@@ -39,8 +39,26 @@ function randomNick() {
   return nick;
 }
 
-function message(msg) {
+function makeUUID() {
+  var i, random;
+  var uuid = '';
+  for (i = 0; i < 32; i++) {
+    random = Math.random() * 16 | 0;
+    if (i === 8 || i === 12 || i === 16 || i === 20) {
+      uuid += '-';
+    }
+    uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
+  }
+  return uuid;
+}
+
+function message(msg, addUUID) {
   msg.date = msg.date || new Date();
+
+  if (addUUID || addUUID === undefined) {
+    msg.uuid = msg.uuid || makeUUID();
+  }
+
   return msg;
 }
 
@@ -50,8 +68,9 @@ io.on('connection', function(socket) {
 
   do { var nick = randomNick(); }
   while (nicks[nick] !== undefined);
+  var uuid = makeUUID();
 
-  nicks[nick] = socket.id;
+  nicks[nick] = uuid;
 
   socket.emit('nickChanged', message({nick: nick}));
   io.emit('peerConnected', message({nick: nick}));
@@ -84,7 +103,7 @@ io.on('connection', function(socket) {
 
     var oldNick = nick;
     delete nicks[oldNick];
-    nicks[newNick] = socket.id;
+    nicks[newNick] = uuid;
     nick = newNick;
 
     socket.emit('nickChanged', message({nick: nick}));
@@ -99,7 +118,7 @@ io.on('connection', function(socket) {
       users.push(user);
     }
 
-    socket.emit('peerList', message({users: users}));
+    socket.emit('peerList', message({users: users}, false));
 
     util.log('sent peer list to "' + nick + '"');
   });

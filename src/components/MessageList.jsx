@@ -25,21 +25,21 @@ export default React.createClass({
     let messages = this.state.messages.map(msg => {
       if (msg.type === 'peerConnected') {
         return (
-          <Message key={uuid()} date={msg.date}>
+          <Message key={msg.uuid} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
             <span> connected</span>
           </Message>
         );
       } else if (msg.type === 'peerDisconnected') {
         return (
-          <Message key={uuid()} date={msg.date}>
+          <Message key={msg.uuid} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
             <span> disconnected</span>
           </Message>
         );
       } else if (msg.type === 'message') {
         return (
-          <Message key={uuid()} date={msg.date}>
+          <Message key={msg.uuid} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
             <span>: </span>
             <span>{msg.body}</span>
@@ -47,7 +47,7 @@ export default React.createClass({
         );
       } else if (msg.type === 'nickChange') {
         return (
-          <Message key={uuid()} date={msg.date}>
+          <Message key={msg.uuid} date={msg.date}>
             <span style={{fontWeight: 'bold'}}>{msg.oldNick}</span>
             <span> changed their nick to </span>
             <span style={{fontWeight: 'bold'}}>{msg.newNick}</span>
@@ -55,7 +55,7 @@ export default React.createClass({
         );
       } else if (msg.type === 'nickTaken') {
         return (
-          <Message key={uuid()} date={msg.date}>
+          <Message key={msg.uuid} date={msg.date}>
             <span>The nick </span>
             <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
             <span> is already in use!</span>
