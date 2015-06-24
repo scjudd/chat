@@ -2,7 +2,7 @@ import Reflux from 'reflux';
 
 import actions from '../actions';
 
-let users = [];
+let users = new Map();
 
 export default Reflux.createStore({
   init: function() {
@@ -13,7 +13,7 @@ export default Reflux.createStore({
   },
 
   onPeerListReceived: function(info) {
-    users = info.users;
+    users = new Map(info.users);
     this.trigger(users);
   },
 

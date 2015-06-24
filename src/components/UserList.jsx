@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { uuid } from '../utils';
 import actions from '../actions';
 import userStore from '../stores/users';
 
 export default React.createClass({
   getInitialState: function() {
-    return {users: []};
+    return {users: new Map()};
   },
 
   componentWillMount: function() {
@@ -30,12 +29,11 @@ export default React.createClass({
       float: 'right'
     };
 
-    return (
-      <ul style={style}>
-        {this.state.users.map(function(user) {
-          return <li key={uuid()}>{user}</li>
-        })}
-      </ul>
-    );
+    let users = [];
+    this.state.users.forEach(function(uuid, nick) {
+      users.push(<li key={uuid}>{nick}</li>);
+    });
+
+    return <ul style={style}>{users}</ul>;
   }
 });

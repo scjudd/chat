@@ -12,6 +12,8 @@ var publicPath = path.resolve(__dirname, 'public');
 
 var util = require('util');
 
+var sortedMap = require('./server/sortedMap');
+
 app.use(express.static(publicPath));
 
 if (!isProduction) {
@@ -62,15 +64,15 @@ function message(msg, addUUID) {
   return msg;
 }
 
-var nicks = Object.create(null);
+var users = sortedMap();
 
 io.on('connection', function(socket) {
 
-  do { var nick = randomNick(); }
-  while (nicks[nick] !== undefined);
   var uuid = makeUUID();
 
-  nicks[nick] = uuid;
+  do { var nick = randomNick(); }
+  while (users.get(nick) !== undefined);
+  users.set(nick, uuid);
 
   socket.emit('nickChanged', message({nick: nick}));
   io.emit('peerConnected', message({nick: nick}));
@@ -78,7 +80,7 @@ io.on('connection', function(socket) {
   util.log(nick + ' connected');
 
   socket.on('disconnect', function() {
-    delete nicks[nick];
+    users.delete(nick);
 
     io.emit('peerDisconnected', message({nick: nick}));
 
@@ -93,7 +95,7 @@ io.on('connection', function(socket) {
 
   socket.on('changeNick', function(newNick) {
 
-    if (nicks[newNick] !== undefined) {
+    if (users.get(newNick) !== undefined) {
       socket.emit('nickTaken', message({nick: newNick}));
 
       util.log('nick "' + newNick + '" is taken!');
@@ -102,8 +104,8 @@ io.on('connection', function(socket) {
     }
 
     var oldNick = nick;
-    delete nicks[oldNick];
-    nicks[newNick] = uuid;
+    users.delete(oldNick);
+    users.set(newNick, uuid);
     nick = newNick;
 
     socket.emit('nickChanged', message({nick: nick}));
@@ -113,12 +115,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('getPeerList', function() {
-    var users = [];
-    for (var user in nicks) {
-      users.push(user);
-    }
-
-    socket.emit('peerList', message({users: users}, false));
+    socket.emit('peerList', message({users: users.array()}, false));
 
     util.log('sent peer list to "' + nick + '"');
   });
