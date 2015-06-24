@@ -5,7 +5,7 @@ import userStore from '../stores/users';
 
 export default React.createClass({
   getInitialState: function() {
-    return {users: new Map()};
+    return {users: []};
   },
 
   componentWillMount: function() {
@@ -40,8 +40,8 @@ export default React.createClass({
     };
 
     let users = [];
-    this.state.users.forEach(function(uuid, nick) {
-      users.push(<li key={uuid}>{nick}</li>);
+    this.state.users.forEach(function(pair) {
+      users.push(<li key={pair[1]}>{pair[0]}</li>);
     });
 
     return <ul style={style}>{users}</ul>;

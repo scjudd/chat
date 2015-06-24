@@ -11,8 +11,7 @@ var port = isProduction ? 8080 : 3001;
 var publicPath = path.resolve(__dirname, 'public');
 
 var util = require('util');
-
-var sortedArray = require('./server/sortedArray');
+var KVFns = require('./common/keyvalue');
 
 app.use(express.static(publicPath));
 
@@ -64,15 +63,15 @@ function message(msg, addUUID) {
   return msg;
 }
 
-var users = sortedArray();
+var users = [];
 
 io.on('connection', function(socket) {
 
   var uuid = makeUUID();
 
   do { var nick = randomNick(); }
-  while (users.get(nick) !== undefined);
-  users.push(nick, uuid);
+  while (KVFns.get.call(users, nick) !== undefined);
+  KVFns.push.call(users, nick, uuid);
 
   socket.emit('nickChanged', message({nick: nick}));
   io.emit('peerConnected', message({nick: nick}));
@@ -80,7 +79,7 @@ io.on('connection', function(socket) {
   util.log(nick + ' connected');
 
   socket.on('disconnect', function() {
-    users.delete(nick);
+    KVFns.delete.call(users, nick);
 
     io.emit('peerDisconnected', message({nick: nick}));
 
@@ -95,7 +94,7 @@ io.on('connection', function(socket) {
 
   socket.on('changeNick', function(newNick) {
 
-    if (users.get(newNick) !== undefined) {
+    if (KVFns.get.call(users, newNick) !== undefined) {
       socket.emit('nickTaken', message({nick: newNick}));
 
       util.log('nick "' + newNick + '" is taken!');
@@ -104,8 +103,8 @@ io.on('connection', function(socket) {
     }
 
     var oldNick = nick;
-    users.delete(oldNick);
-    users.push(newNick, uuid);
+    KVFns.delete.call(users, oldNick);
+    KVFns.push.call(users, newNick, uuid);
     nick = newNick;
 
     socket.emit('nickChanged', message({nick: nick}));
@@ -115,7 +114,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('getPeerList', function() {
-    socket.emit('peerList', message({users: users.array()}, false));
+    socket.emit('peerList', message({users: users}, false));
 
     util.log('sent peer list to "' + nick + '"');
   });

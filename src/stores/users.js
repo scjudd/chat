@@ -1,8 +1,9 @@
 import Reflux from 'reflux';
 
+import KVFns from '../../common/keyvalue';
 import actions from '../actions';
 
-let users = new Map();
+let users = [];
 
 export default Reflux.createStore({
   init: function() {
@@ -13,7 +14,7 @@ export default Reflux.createStore({
   },
 
   onPeerListReceived: function(info) {
-    users = new Map(info.users);
+    users = info.users;
     this.trigger(users);
   },
 
