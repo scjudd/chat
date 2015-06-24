@@ -19,14 +19,18 @@ export default Reflux.createStore({
   },
 
   onPeerConnected: function(info) {
-    actions.getPeerList();
+    KVFns.push.call(users, info.nick, info.peeruuid);
+    this.trigger(users);
   },
 
   onPeerDisconnected: function(info) {
-    actions.getPeerList();
+    KVFns.delete.call(users, info.nick);
+    this.trigger(users);
   },
 
   onPeerChangedNick: function(info) {
-    actions.getPeerList();
+    KVFns.delete.call(users, info.oldNick);
+    KVFns.push.call(users, info.newNick, info.peeruuid);
+    this.trigger(users);
   }
 });

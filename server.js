@@ -74,20 +74,20 @@ io.on('connection', function(socket) {
   KVFns.push.call(users, nick, uuid);
 
   socket.emit('nickChanged', message({nick: nick}));
-  io.emit('peerConnected', message({nick: nick}));
+  io.emit('peerConnected', message({nick: nick, peeruuid: uuid}));
 
   util.log(nick + ' connected');
 
   socket.on('disconnect', function() {
     KVFns.delete.call(users, nick);
 
-    io.emit('peerDisconnected', message({nick: nick}));
+    io.emit('peerDisconnected', message({nick: nick, peeruuid: uuid}));
 
     util.log(nick + ' disconnected');
   });
 
   socket.on('sendMessage', function(body) {
-    io.emit('peerSentMessage', message({nick: nick, body: body}));
+    io.emit('peerSentMessage', message({nick: nick, body: body, peeruuid: uuid}));
 
     util.log(nick + ': ' + body);
   });
@@ -108,7 +108,7 @@ io.on('connection', function(socket) {
     nick = newNick;
 
     socket.emit('nickChanged', message({nick: nick}));
-    io.emit('peerChangedNick', message({oldNick: oldNick, newNick: nick}));
+    io.emit('peerChangedNick', message({oldNick: oldNick, newNick: nick, peeruuid: uuid}));
 
     util.log('"' + oldNick + '" changed nick to "' + nick + '"');
   });
