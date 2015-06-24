@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { m } from '../utils';
 import messageStore from '../stores/messages';
 import Message from './Message';
 
@@ -65,7 +66,7 @@ export default React.createClass({
     });
 
     return (
-      <div>{messages}</div>
+      <div style={m(this.props.style, {overflowY: 'auto'})}>{messages}</div>
     );
   }
 });

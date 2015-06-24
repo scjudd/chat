@@ -14,19 +14,38 @@ export default React.createClass({
   
   componentDidMount: function() {
     this.unsubscribe = userStore.listen(this.onChange);
+
+    this.updateWidth();
+    window.addEventListener('resize', this.updateWidth);
   },
 
   componentWillUnmount: function() {
     this.unsubscribe();
+
+    window.removeEventListener('resize', this.updateWidth);
+  },
+
+  updateWidth: function() {
+    if (this.props.widthCallback !== undefined) {
+      this.props.widthCallback(this.getDOMNode().offsetWidth);
+    }
   },
 
   onChange: function(users) {
     this.setState({users});
+    this.updateWidth();
   },
 
   render: function() {
     let style = {
-      float: 'right'
+      position: 'fixed',
+      right: 0,
+      top: 0,
+      margin: 0,
+      height: '100%',
+      padding: '0.5rem 1rem',
+      listStyle: 'none',
+      borderLeft: '1px solid black'
     };
 
     let users = [];
