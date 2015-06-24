@@ -5,7 +5,7 @@ import nickStore from '../stores/nick';
 
 export default React.createClass({
   getInitialState: function() {
-    return {nick: undefined};
+    return {last: undefined, nick: undefined};
   },
 
   componentDidMount: function() {
@@ -17,7 +17,7 @@ export default React.createClass({
   },
 
   onChangeReceived: function(info) {
-    this.setState({nick: info.nick});
+    this.setState({last: info.nick, nick: info.nick});
   },
 
   onChange: function() {
@@ -25,7 +25,9 @@ export default React.createClass({
   },
 
   onBlur: function() {
-    actions.changeNick(this.state.nick);
+    if (this.state.last !== this.state.nick) {
+      actions.changeNick(this.state.nick);
+    }
   },
 
   render: function() {
