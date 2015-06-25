@@ -2,10 +2,14 @@ import React from 'react';
 import { formatDate } from '../utils';
 
 export default React.createClass({
+  propTypes: {
+    date: React.PropTypes.instanceOf(Date).isRequired
+  },
+
   render: function() {
     let styles = {
       container: {
-        textAlign: 'center',
+        textAlign: 'center'
       },
       date: {
         background: 'white',
@@ -20,7 +24,7 @@ export default React.createClass({
     };
 
     return (
-      <div style={{textAlign: 'center'}}>
+      <div style={styles.container}>
         <span style={styles.date}>{formatDate(this.props.date)}</span>
         <div style={styles.horizontalRule} />
       </div>
