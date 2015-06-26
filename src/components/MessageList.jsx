@@ -30,7 +30,7 @@ export default React.createClass({
 
       if (msg.date.getDate() !== lastDate) {
         lastDate = msg.date.getDate();
-        messages.push(<DateSeparator date={msg.date} />);
+        messages.push(<DateSeparator key={'date-'+msg.uuid} date={msg.date} />);
       }
 
       if (msg.type === 'peerConnected') {
