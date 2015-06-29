@@ -7,7 +7,7 @@ var app = express();
 var http = require('http').Server(app);
 
 var isProduction = process.env.NODE_ENV === 'production';
-var port = isProduction ? 8080 : 3001;
+var port = isProduction ? process.env.PORT || 8080 : 3001;
 var publicPath = path.resolve(__dirname, 'public');
 
 var util = require('util');
