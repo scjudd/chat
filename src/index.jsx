@@ -10,12 +10,14 @@ let isActive = true;
 let original = document.title;
 
 messageStore.listen(function(messages) {
-  if (messages[messages.length-1].type === 'message') {
-    newMessages += 1;
-  }
+  if (!isActive) {
+    if (messages[messages.length-1].type === 'message') {
+      newMessages += 1;
+    }
 
-  if (!isActive && newMessages > 0) {
-    document.title = '(' + newMessages + ') ' + original;
+    if (newMessages > 0) {
+      document.title = '(' + newMessages + ') ' + original;
+    }
   }
 });
 
