@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import { formatTime } from '../utils';
 
@@ -8,10 +9,18 @@ export default React.createClass({
   },
 
   render: function() {
+    let classes = classNames(
+      'Message',
+      this.props.className
+    );
+
     return (
-      <div style={{wordWrap: 'break-word'}}>
-        <span>{formatTime(this.props.date)} │ </span>
-        {this.props.children}
+      <div className={classes}>
+        <span className="date">{formatTime(this.props.date)}</span>
+        <span className="separator"> │ </span>
+        <span className="payload">
+          {this.props.children}
+        </span>
       </div>
     );
   }

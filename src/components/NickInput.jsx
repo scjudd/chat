@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import actions from '../actions';
 import nickStore from '../stores/nick';
@@ -31,12 +32,10 @@ export default React.createClass({
   },
 
   render: function() {
-    let style = {
-      boxSizing: 'border-box',
-      padding: 6,
-      border: '1px solid black',
-      fontSize: '1.25em'
-    };
+    let classes = classNames(
+      'NickInput',
+      this.props.className
+    );
 
     return (
       <input
@@ -45,7 +44,7 @@ export default React.createClass({
         value={this.state.nick}
         onChange={this.onChange}
         onBlur={this.onBlur}
-        style={style}
+        className={classes}
       />
     );
   }

@@ -1,7 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import actions from '../actions';
-import { m } from '../utils';
 
 export default React.createClass({
   getInitialState: function() {
@@ -20,13 +20,10 @@ export default React.createClass({
   },
 
   render: function() {
-    let style = {
-      boxSizing: 'border-box',
-      width: 'inherit',
-      padding: 6,
-      border: '1px solid black',
-      fontSize: '1.25em'
-    };
+    let classes = classNames(
+      'MessageInput',
+      this.props.className
+    );
 
     return (
       <input
@@ -35,7 +32,9 @@ export default React.createClass({
         value={this.state.message}
         onChange={this.onChange}
         onKeyUp={this.onKeyUp}
-        style={m(style, this.props.style)} />
+        className={classes}
+        style={this.props.style}
+      />
     );
   }
 });

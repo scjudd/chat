@@ -1,6 +1,6 @@
 import React from 'react';
+import classNames from 'classnames';
 
-import { m } from '../utils';
 import messageStore from '../stores/messages';
 import DateSeparator from './DateSeparator';
 import Message from './Message';
@@ -26,6 +26,11 @@ export default React.createClass({
     let lastDate;
     let messages = [];
 
+    let classes = classNames(
+      'MessageList',
+      this.props.className
+    );
+
     this.state.messages.forEach(msg => {
 
       if (msg.date.getDate() !== lastDate) {
@@ -35,8 +40,8 @@ export default React.createClass({
 
       if (msg.type === 'peerConnected') {
         messages.push(
-          <Message key={msg.uuid} date={msg.date}>
-            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+          <Message className="peerConnected" key={msg.uuid} date={msg.date}>
+            <span className="nick">{msg.nick}</span>
             <span> connected</span>
           </Message>
         );
@@ -44,8 +49,8 @@ export default React.createClass({
 
       else if (msg.type === 'peerDisconnected') {
         messages.push(
-          <Message key={msg.uuid} date={msg.date}>
-            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+          <Message className="peerDisconnected" key={msg.uuid} date={msg.date}>
+            <span className="nick">{msg.nick}</span>
             <span> disconnected</span>
           </Message>
         );
@@ -53,29 +58,29 @@ export default React.createClass({
 
       else if (msg.type === 'message') {
         messages.push(
-          <Message key={msg.uuid} date={msg.date}>
-            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+          <Message className="message" key={msg.uuid} date={msg.date}>
+            <span className="nick">{msg.nick}</span>
             <span>: </span>
-            <span>{msg.body}</span>
+            <span className="body">{msg.body}</span>
           </Message>
         );
       }
 
       else if (msg.type === 'nickChange') {
         messages.push(
-          <Message key={msg.uuid} date={msg.date}>
-            <span style={{fontWeight: 'bold'}}>{msg.oldNick}</span>
+          <Message className="nickChange" key={msg.uuid} date={msg.date}>
+            <span className="old nick">{msg.oldNick}</span>
             <span> changed their nick to </span>
-            <span style={{fontWeight: 'bold'}}>{msg.newNick}</span>
+            <span className="new nick">{msg.newNick}</span>
           </Message>
         );
       }
 
       else if (msg.type === 'nickTaken') {
         messages.push(
-          <Message key={msg.uuid} date={msg.date}>
+          <Message className="nickTaken" key={msg.uuid} date={msg.date}>
             <span>The nick </span>
-            <span style={{fontWeight: 'bold'}}>{msg.nick}</span>
+            <span className="nick">{msg.nick}</span>
             <span> is already in use!</span>
           </Message>
         );
@@ -83,7 +88,9 @@ export default React.createClass({
     });
 
     return (
-      <div style={m(this.props.style, {overflowY: 'auto'})}>{messages}</div>
+      <div className={classes} style={this.props.style}>
+        {messages}
+      </div>
     );
   }
 });

@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 0.75em;
+}
+
+.DateSeparator {
+  text-align: center;
+}
+
+.DateSeparator .date {
+  background: white;
+  padding: 0 0.5rem;
+}
+
+.DateSeparator .rule {
+  position: relative;
+  bottom: 0.5rem;
+  border-bottom: 1px dotted black;
+  z-index: -1;
+}
+
+.Message {
+  word-wrap: break-word;
+}
+
+.MessageBar {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 6px;
+}
+
+.MessageInput,
+.NickInput {
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid black;
+  font-size: 1.25em;
+}
+
+.Message > .payload .nick {
+  font-weight: bold;
+}
+
+.MessageList {
+  overflow-y: auto;
+}
+
+.UserList {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin: 0;
+  height: 100%;
+  padding: 0.5rem 1rem;
+  list-style: none;
+  border-left: 1px solid black;
+}

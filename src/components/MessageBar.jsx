@@ -1,17 +1,15 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export default React.createClass({
   render: function() {
-    let style = {
-      boxSizing: 'border-box',
-      position: 'fixed',
-      bottom: 0,
-      width: '100%',
-      padding: 6
-    };
+    let classes = classNames(
+      'MessageBar',
+      this.props.className
+    );
 
     return (
-      <div style={style}>
+      <div className={classes}>
         {this.props.children}
       </div>
     );

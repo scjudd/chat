@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { formatDate } from '../utils';
 
 export default React.createClass({
@@ -7,26 +8,15 @@ export default React.createClass({
   },
 
   render: function() {
-    let styles = {
-      container: {
-        textAlign: 'center'
-      },
-      date: {
-        background: 'white',
-        padding: '0 0.5rem'
-      },
-      horizontalRule: {
-        position: 'relative',
-        bottom: '0.5rem',
-        borderBottom: '1px dotted black',
-        zIndex: -1
-      }
-    };
+    let classes = classNames(
+      'DateSeparator',
+      this.props.className
+    );
 
     return (
-      <div style={styles.container}>
-        <span style={styles.date}>{formatDate(this.props.date)}</span>
-        <div style={styles.horizontalRule} />
+      <div className={classes}>
+        <span className="date">{formatDate(this.props.date)}</span>
+        <div className="rule"/>
       </div>
     );
   }
