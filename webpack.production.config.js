@@ -13,6 +13,12 @@ module.exports = {
   },
   module: {
     loaders: [{
+      test: /\.css$/,
+      loaders: ['style', 'css', 'autoprefixer'],
+    },{
+      test: /\.jpg$/,
+      loader: 'file'
+    },{
       test: /\.jsx?$/,
       loader: 'babel',
       include: path.join(__dirname, 'src')
