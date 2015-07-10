@@ -3,7 +3,7 @@ require('./styles/base.css');
 import React from 'react';
 import App from './components/App';
 
-React.render(<App />, document.getElementById('root'));
+React.render(<App />, document.body);
 
 import messageStore from './stores/messages';
 

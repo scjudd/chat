@@ -8,7 +8,7 @@ var http = require('http').Server(app);
 
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT || 8080 : 3001;
-var publicPath = path.resolve(__dirname, 'public');
+var publicPath = path.resolve(__dirname, 'build');
 
 var util = require('util');
 var KVFns = require('./common/keyvalue');
@@ -19,7 +19,7 @@ if (!isProduction) {
   var bundle = require('./server/bundle.js');
   bundle();
 
-  app.all('/build/*', function(req, res) {
+  app.all('*', function(req, res) {
     proxy.web(req, res, {
       target: 'http://localhost:8080'
     });

@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // Makes sure errors in console map to the correct file
@@ -11,12 +12,12 @@ module.exports = {
     './src/index',
   ],
   output: {
-    path: path.join(__dirname, 'public', 'build'),
-    filename: 'bundle.js',
-    publicPath: '/build/'
+    path: path.join(__dirname, 'build'),
+    filename: 'bundle.js'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({title: 'Chat'}),
     new webpack.NoErrorsPlugin()
   ],
   resolve: {

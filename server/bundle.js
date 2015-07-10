@@ -17,7 +17,6 @@ module.exports = function() {
   });
 
   var bundler = new WebpackDevServer(compiler, {
-    publicPath: '/build/',
     inline: true,
     hot: true,
     historyApiFallback: true,
